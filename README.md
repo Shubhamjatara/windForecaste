@@ -117,6 +117,18 @@ pnpm build
 
 Backend tests use mocked HTTP responses and temporary databases, covering eligibility, boundaries, metrics, validation, source normalization, cache expiry, retries and API errors. Frontend unit tests cover date validation, formatting, empty coverage and API response validation. The frontend build checks TypeScript and generates production assets.
 
+## Vercel deployment
+
+The root `vercel.json` configures one project with two services: FastAPI in `backend` and Vite in `dashboard`. [Vercel Services](https://vercel.com/docs/services) is currently in beta.
+
+Import the repository into Vercel with the **repository root** as the Root Directory, keeping build settings in `vercel.json`. Select Node.js 22 or newer in the project settings; the dashboard install command uses pnpm 11.25.0. The Vercel build sets `SERVER_URL` to an empty value so the browser calls `/api` on the same deployment, including previews. Local `dashboard/.env` settings continue to work for local development.
+
+Routing sends `/api/*`, `/docs`, `/redoc` and `/openapi.json` to FastAPI, preserving their paths. All other requests go to the dashboard, with an `index.html` fallback for frontend page URLs. Check `/api/health` and `/docs` after deployment, then load the dashboard to verify an analytics request.
+
+The backend function has a 120-second limit, above the application's 90-second retrieval timeout. On Vercel, the default SQLite cache uses `/tmp/windscope/elexon.sqlite3`; this is temporary per-instance storage and can disappear between invocations or deployments. Cold instances fetch Elexon data again. Leave `CACHE_PATH` unset unless supplying a writable temporary location; `CACHE_TTL_SECONDS` remains optional. Same-origin dashboard requests do not require additional CORS origins.
+
+Local environment files, virtual environments, build output and caches are excluded from CLI uploads by `.vercelignore`. Configure any hosting variables in Vercel's project settings. After deployment, add the actual public application URL to this README.
+
 ## Docker
 
 With Docker Desktop running in Linux-container mode:

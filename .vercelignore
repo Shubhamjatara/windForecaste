@@ -1,0 +1,13 @@
+.git
+.pnpm-store
+.pytest*
+**/.pytest_cache
+**/__pycache__
+**/*.pyc
+**/.env
+**/.env.local
+**/.env.*.local
+backend/.venv
+backend/.cache
+dashboard/node_modules
+dashboard/dist

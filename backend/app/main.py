@@ -4,6 +4,7 @@ import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from tempfile import gettempdir
 
 import httpx
 from dotenv import load_dotenv
@@ -28,7 +29,13 @@ def create_app() -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        cache_path = Path(os.getenv("CACHE_PATH", str(DEFAULT_CACHE_PATH)))
+        # Vercel's application directory is read-only; its cache is disposable.
+        default_cache_path = (
+            Path(gettempdir()) / "windscope" / "elexon.sqlite3"
+            if os.getenv("VERCEL") == "1"
+            else DEFAULT_CACHE_PATH
+        )
+        cache_path = Path(os.getenv("CACHE_PATH", str(default_cache_path)))
         cache_lifetime = int(os.getenv("CACHE_TTL_SECONDS", "3600"))
         cache = ResponseCache(cache_path, ttl_seconds=cache_lifetime)
 
