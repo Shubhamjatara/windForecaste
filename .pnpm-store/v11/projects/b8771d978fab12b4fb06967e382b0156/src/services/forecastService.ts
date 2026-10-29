@@ -1,6 +1,8 @@
 import { decisionRange } from "@/lib/forecast";
 import type { DecisionSettings, ForecastAnalysis } from "@/types/forecast";
 
+const serverUrl = (import.meta.env.SERVER_URL ?? "").trim().replace(/\/+$/, "");
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -77,13 +79,13 @@ export async function loadAnalysis(
   });
   let response: Response;
   try {
-    response = await fetch(`/api/v1/analytics?${params}`, {
+    response = await fetch(`${serverUrl}/api/v1/analytics?${params}`, {
       signal: AbortSignal.any([signal, AbortSignal.timeout(100_000)]),
     });
   } catch (error) {
     if (signal.aborted) throw error;
     throw new Error(
-      "Unable to reach the Python backend or the request timed out. Check that it is running on port 8000, then retry.",
+      "Unable to reach the backend or the request timed out. Check the server URL and backend availability, then retry.",
     );
   }
   const payload: unknown = await response.json().catch(() => null);

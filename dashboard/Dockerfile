@@ -4,8 +4,8 @@ RUN npm install --global pnpm@11
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-ARG VITE_SERVER_URL=""
-ENV VITE_SERVER_URL=$VITE_SERVER_URL
+ARG SERVER_URL=""
+ENV SERVER_URL=$SERVER_URL
 RUN pnpm build
 
 FROM nginx:alpine

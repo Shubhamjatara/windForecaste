@@ -1,7 +1,7 @@
 import { decisionRange } from "@/lib/forecast";
 import type { DecisionSettings, ForecastAnalysis } from "@/types/forecast";
 
-const serverUrl = (import.meta.env.VITE_SERVER_URL ?? "").trim().replace(/\/+$/, "");
+const serverUrl = (import.meta.env.SERVER_URL ?? "").trim().replace(/\/+$/, "");
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;

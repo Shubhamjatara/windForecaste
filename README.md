@@ -23,7 +23,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open **http://127.0.0.1:5173**. Vite forwards `/api` to the backend on port 8000. API documentation: **http://127.0.0.1:8000/docs**. On macOS/Linux, use `.venv/bin/python` in place of `.\.venv\Scripts\python.exe`.
+Open **http://127.0.0.1:5173**. Set `SERVER_URL` in `dashboard/.env` to the backend base URL (for example, `http://127.0.0.1:8000`, without `/api`). Copy `dashboard/.env.example` if needed. Restart Vite after changes; production changes require a rebuild. If unset or empty, Vite forwards same-origin `/api` requests to the backend on port 8000. For direct cross-origin requests, include the frontend origin in the backend's `CORS_ORIGINS`. API documentation: **http://127.0.0.1:8000/docs**. On macOS/Linux, use `.venv/bin/python` in place of `.\.venv\Scripts\python.exe`.
 
 The dashboard uses only real Elexon archive data returned by the Python API. The backend must be running. Source badges, explanations and CSV filenames identify Elexon. A backend or upstream failure displays a retryable error; no offline dataset or generated fallback is included.
 

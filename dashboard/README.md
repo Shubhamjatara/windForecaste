@@ -21,12 +21,12 @@ Open http://127.0.0.1:5173. Refresh requests fresh upstream data through the bac
 Edit `dashboard/.env` (copy `.env.example` if it does not exist):
 
 ```dotenv
-VITE_SERVER_URL=http://127.0.0.1:8000
+SERVER_URL=http://127.0.0.1:8000
 ```
 
 Use your backend base URL without `/api`; the client appends `/api/v1/analytics`. For a hosted backend, replace the value with its HTTPS URL and add the dashboard's origin to the backend's `CORS_ORIGINS`. Restart `pnpm dev` after changes. Vite includes this public setting at build time, so set it before `pnpm build` or in your frontend hosting build environment, then rebuild/redeploy.
 
-If the value is empty or absent, requests use same-origin `/api`: Vite proxies to localhost port 8000 during development, and Nginx proxies to the backend in Docker Compose. Docker builds default to this mode and exclude the local `.env` file. For a custom Docker backend URL, pass `--build-arg VITE_SERVER_URL=https://your-backend.example` when building the dashboard image.
+If the value is empty or absent, requests use same-origin `/api`: Vite proxies to localhost port 8000 during development, and Nginx proxies to the backend in Docker Compose. Docker builds default to this mode and exclude the local `.env` file. For a custom Docker backend URL, pass `--build-arg SERVER_URL=https://your-backend.example` when building the dashboard image.
 
 ## Workflows
 
