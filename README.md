@@ -93,7 +93,17 @@ Invalid selections return HTTP 422; upstream errors return 502, and bounded retr
 
 Upstream requests run in seven-day chunks with at most three concurrent requests, bounded retries for network errors/429/5xx, a 30-second HTTP timeout and a 90-second overall retrieval limit. SQLite caches upstream responses for one hour; expired entries are not silently served. Refresh forces new retrieval. Concurrent loads are serialized per backend process.
 
-Optional shell variables are documented in `backend/.env.example`: `CACHE_PATH`, `CACHE_TTL_SECONDS`, `CORS_ORIGINS`. No `.env` loader is required or enabled. Default cache: `backend/.cache/elexon.sqlite3`. This small local service has no authentication and is intended for this dashboard; review access control/rate limiting before public hosting.
+Optional settings are documented in `backend/.env.example`: `CACHE_PATH`, `CACHE_TTL_SECONDS`, `CORS_ORIGINS`. Copy it to `backend/.env` if that file does not exist. The backend loads this file automatically; existing shell or hosting environment variables take precedence. Default cache: `backend/.cache/elexon.sqlite3`.
+
+Set `CORS_ORIGINS` in `backend/.env` to the frontend origins allowed to make browser requests to the API, separated by commas:
+
+```dotenv
+CORS_ORIGINS=http://127.0.0.1:5173,http://localhost:5173,https://your-frontend.vercel.app
+```
+
+Replace the example deployment URL with your actual frontend origin. Include the scheme (`http://` or `https://`) and port when needed, but no path or trailing slash. Restart the backend after changing this file. Docker Compose also reads `backend/.env`; run `docker compose up -d --build` to apply changes. On a hosting platform, set `CORS_ORIGINS` in its environment settings. The local `.env` file is ignored by Git and excluded from the Docker image.
+
+This small local service has no authentication and is intended for this dashboard; review access control/rate limiting before public hosting.
 
 ## Verify
 

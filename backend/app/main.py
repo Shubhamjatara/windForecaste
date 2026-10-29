@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import httpx
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -23,6 +24,7 @@ DEFAULT_CORS_ORIGINS = "http://127.0.0.1:5173,http://localhost:5173"
 
 def create_app() -> FastAPI:
     """Create the application with an Elexon repository."""
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
